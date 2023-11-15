@@ -49,6 +49,10 @@ class Universe {
 
   virtual bool contains_universe(uint32_t id) const = 0;
 
+  virtual uint64_t number_of_cell_instances(uint32_t id) const = 0;
+  
+  virtual std::set<uint32_t> get_all_contained_cells() const = 0;
+
   bool has_boundary_conditions() const { return has_boundary_conditions_; }
 
   uint32_t id() const;

@@ -143,6 +143,31 @@ bool CellUniverse::contains_universe(uint32_t id) const {
   return false;
 }
 
+
+uint64_t CellUniverse::number_of_cell_instances(uint32_t id) const 
+{
+   uint64_t instances = 0;
+  for (auto& indx : cell_indicies) {
+    Cell* cell = geometry::cells[indx].get();
+    if (cell->fill() == Cell::Fill::Universe) {
+      instances += cell->universe()->number_of_cell_instances();
+    }
+  }
+  return instances;
+}
+  
+std::set<uint32_t> CellUniverse::get_all_contained_cells() const 
+{
+  std::set<uint32_t> contained_cells;
+  for (auto& indx : cell_indicies) {
+    Cell* cell = geometry::cells[indx].get();
+    if (cell->fill() == Cell::Fill::Universe) {
+      std::set<uint32_t> s = cell->universe()->get_all_contained_cells();
+      contained_cells.insert(s.begin(),s.end());
+    }
+  }
+  return contained_cells;
+}
 Boundary CellUniverse::lost_get_boundary(const Position& r, const Direction& u,
                                          int32_t on_surf) const {
   double dist = INF;
